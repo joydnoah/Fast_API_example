@@ -66,7 +66,7 @@ def insert_recipe_response(recipe: RecipeRequest) -> PostRecipeMessageResponse:
     recipe = insert_recipe(recipe)
     return PostRecipeMessageResponse(
         message="Recipe successfully created!",
-        recipe=recipe.post_response()
+        recipe=[recipe.post_response().model_dump()]
     )
 
 @app.patch("/recipes/{id}")
