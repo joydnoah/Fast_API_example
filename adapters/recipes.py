@@ -8,11 +8,15 @@ engine = get_engine()
 
 def get_recipe(recipe_id: int) -> Recipes:
     session = Session(engine)
-    return session.query(Recipes).filter_by(id=recipe_id).first()
+    recipe = session.query(Recipes).filter_by(id=recipe_id).first()
+    session.close()
+    return recipe
 
 def get_all_recipes() -> List[Recipes]:
     session = Session(engine)
-    return session.query(Recipes).all()
+    recipe = session.query(Recipes).all()
+    session.close()
+    return recipe
 
 def update_recipe(recipe_id: int, recipe_data: UpdateRecipeRequest) -> Recipes:
     session = Session(engine)
@@ -30,6 +34,7 @@ def update_recipe(recipe_id: int, recipe_data: UpdateRecipeRequest) -> Recipes:
         recipe.cost = data["cost"]
     session.commit()
     session.refresh(recipe)
+    session.close()
     return recipe
 
 def insert_recipe(recipe_data: RecipeRequest) -> Recipes:
@@ -44,9 +49,11 @@ def insert_recipe(recipe_data: RecipeRequest) -> Recipes:
     session.add(recipe)
     session.commit()
     session.refresh(recipe)
+    session.close()
     return recipe
 
 def delete_recipe(recipe_id: int) -> None:
     session = Session(engine)
     session.query(Recipes).filter_by(id=recipe_id).delete()
     session.commit()
+    session.close()

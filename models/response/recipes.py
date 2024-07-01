@@ -32,6 +32,10 @@ class RecipeRequest(BaseModel):
     ingredients: str
     cost: int
 
+    def __init__(self, **data) -> None:
+      print(data)
+      super().__init__(**data)
+
 class UpdateRecipeRequest(BaseModel):
     title: str | None = Field(default=None)
     making_time: str | None = Field(default=None)
