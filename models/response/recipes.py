@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
+from typing import List
 
 class RecipeResponse(BaseModel):
     id: int
@@ -12,6 +13,9 @@ class RecipeResponse(BaseModel):
 class PostRecipeResponse(RecipeResponse):
     created_at: datetime
     updated_at: datetime
+
+class AllRecipesResponse(BaseModel):
+    recipes: List[RecipeResponse]
 
 class GetRecipeMessageResponse(BaseModel):
     message: str

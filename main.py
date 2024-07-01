@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models.response.recipes import GetRecipeMessageResponse, RecipeRequest, PostRecipeMessageResponse, RecipeResponse, UpdateRecipeRequest, BaseResponse
+from models.response.recipes import GetRecipeMessageResponse, RecipeRequest, PostRecipeMessageResponse, RecipeResponse, UpdateRecipeRequest, BaseResponse, AllRecipesResponse
 from models.response.errors import MissingFieldsError
 from adapters.recipes import get_recipe, insert_recipe, get_all_recipes, update_recipe, delete_recipe
 from fastapi.exceptions import RequestValidationError
@@ -44,7 +44,10 @@ async def validation_exception_handler(request, exc: RequestValidationError):
 @app.get("/recipes")
 def get_all_recipes_response() -> List[RecipeResponse]:
     recipes = get_all_recipes()
-    return [recipe.get_response() for recipe in recipes]
+    all_recipes = [recipe.get_response() for recipe in recipes]
+    return AllRecipesResponse(
+        recipes=all_recipes
+    )
 
 @app.get("/recipes/{id}")
 def get_recipe_response(id: int) -> GetRecipeMessageResponse:
