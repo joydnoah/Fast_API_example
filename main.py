@@ -54,7 +54,7 @@ def get_recipe_response(id: int) -> GetRecipeMessageResponse:
     recipe = get_recipe(id)
     return GetRecipeMessageResponse(
         message="Recipe details by id",
-        recipe=recipe.get_response()
+        recipe=[recipe.get_response()]
     )
 
 @app.post("/recipes")
@@ -70,7 +70,7 @@ def update_recipe_response(id: int, recipe_data: UpdateRecipeRequest) -> GetReci
     recipe = update_recipe(id, recipe_data)
     return GetRecipeMessageResponse(
         message="Recipe successfully updated!",
-        recipe=recipe.get_response()
+        recipe=[recipe.get_response()]
     )
 
 @app.delete("/recipes/{id}")

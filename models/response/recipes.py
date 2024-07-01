@@ -19,7 +19,7 @@ class AllRecipesResponse(BaseModel):
 
 class GetRecipeMessageResponse(BaseModel):
     message: str
-    recipe: RecipeResponse
+    recipe: List[RecipeResponse]
 
 class PostRecipeMessageResponse(BaseModel):
     message: str
