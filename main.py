@@ -3,7 +3,7 @@ from models.response.recipes import GetRecipeMessageResponse, RecipeRequest, Pos
 from models.response.errors import MissingFieldsError
 from adapters.recipes import get_recipe, insert_recipe, get_all_recipes, update_recipe, delete_recipe
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, JSONResponse
 from typing import List
 from typing import Callable, List
 
@@ -16,8 +16,6 @@ app = FastAPI()
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request, exc: RequestValidationError):
-    print("Exception")
-    print(str(exc))
     errors = exc.errors()
     missing_validation = []
     for error in errors:
@@ -25,8 +23,10 @@ async def validation_exception_handler(request, exc: RequestValidationError):
             missing_validation.append(error['loc'][1])
         else:
             return PlainTextResponse(str(exc), status_code=404)
-    response = MissingFieldsError(required=missing_validation)
-    return PlainTextResponse(response.model_dump_json(), status_code=200)
+    return JSONResponse(content={
+        "message": "Recipe creation failed!",
+        "required": ', '.join(missing_validation)
+    })
 
 @app.get("/recipes")
 def get_all_recipes_response() -> AllRecipesResponse:
