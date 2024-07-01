@@ -21,10 +21,8 @@ class Recipes(Base):
         return f"Recipe({self.id})"
     
     def get_response(self):
-        print(self.__dict__)
         return RecipeResponse(**self.__dict__)
     
     def post_response(self):
-        print(self.__dict__)
         return PostRecipeResponse(**self.__dict__)
     
