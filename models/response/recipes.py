@@ -15,7 +15,7 @@ class PostRecipeResponse(RecipeResponse):
     updated_at: datetime
 
 class AllRecipesResponse(BaseModel):
-    recipes: List[RecipeResponse]
+    recipes: List[dict]
 
 class GetRecipeMessageResponse(BaseModel):
     message: str

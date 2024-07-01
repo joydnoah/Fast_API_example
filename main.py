@@ -42,9 +42,9 @@ async def validation_exception_handler(request, exc: RequestValidationError):
     return PlainTextResponse(response.model_dump_json(), status_code=400)
 
 @app.get("/recipes")
-def get_all_recipes_response() -> List[RecipeResponse]:
+def get_all_recipes_response() -> AllRecipesResponse:
     recipes = get_all_recipes()
-    all_recipes = [recipe.get_response() for recipe in recipes]
+    all_recipes = [recipe.get_response().model_dump() for recipe in recipes]
     return AllRecipesResponse(
         recipes=all_recipes
     )
@@ -52,9 +52,13 @@ def get_all_recipes_response() -> List[RecipeResponse]:
 @app.get("/recipes/{id}")
 def get_recipe_response(id: int) -> GetRecipeMessageResponse:
     recipe = get_recipe(id)
+    if recipe:
+        recipe = [recipe.get_response().model_dump()]
+    else:
+        recipe = []
     return GetRecipeMessageResponse(
         message="Recipe details by id",
-        recipe=[recipe.get_response()]
+        recipe=recipe
     )
 
 @app.post("/recipes")
@@ -70,7 +74,7 @@ def update_recipe_response(id: int, recipe_data: UpdateRecipeRequest) -> GetReci
     recipe = update_recipe(id, recipe_data)
     return GetRecipeMessageResponse(
         message="Recipe successfully updated!",
-        recipe=[recipe.get_response()]
+        recipe=[recipe.get_response().model_dump()]
     )
 
 @app.delete("/recipes/{id}")
