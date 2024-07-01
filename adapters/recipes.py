@@ -4,21 +4,23 @@ from models.response.recipes import RecipeRequest, UpdateRecipeRequest
 from sqlalchemy.orm import Session
 from typing import List
 
-engine = get_engine()
 
 def get_recipe(recipe_id: int) -> Recipes:
+    engine = get_engine()
     session = Session(engine)
     recipe = session.query(Recipes).filter_by(id=recipe_id).first()
     session.close()
     return recipe
 
 def get_all_recipes() -> List[Recipes]:
+    engine = get_engine()
     session = Session(engine)
     recipe = session.query(Recipes).all()
     session.close()
     return recipe
 
 def update_recipe(recipe_id: int, recipe_data: UpdateRecipeRequest) -> Recipes:
+    engine = get_engine()
     session = Session(engine)
     data = recipe_data.model_dump(exclude_none=True)
     recipe = session.query(Recipes).filter_by(id=recipe_id).first()
@@ -38,6 +40,7 @@ def update_recipe(recipe_id: int, recipe_data: UpdateRecipeRequest) -> Recipes:
     return recipe
 
 def insert_recipe(recipe_data: RecipeRequest) -> Recipes:
+    engine = get_engine()
     session = Session(engine)
     recipe = Recipes(
         title=recipe_data.title,
@@ -53,6 +56,7 @@ def insert_recipe(recipe_data: RecipeRequest) -> Recipes:
     return recipe
 
 def delete_recipe(recipe_id: int) -> None:
+    engine = get_engine()
     session = Session(engine)
     session.query(Recipes).filter_by(id=recipe_id).delete()
     session.commit()
