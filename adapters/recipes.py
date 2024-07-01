@@ -24,19 +24,22 @@ def update_recipe(recipe_id: int, recipe_data: UpdateRecipeRequest) -> Recipes:
     session = Session(engine)
     data = recipe_data.model_dump(exclude_none=True)
     recipe = session.query(Recipes).filter_by(id=recipe_id).first()
-    if "title" in data:
-        recipe.title = data["title"]
-    if "making_time" in data:
-        recipe.making_time = data["making_time"]
-    if "serves" in data:
-        recipe.serves = data["serves"]
-    if "ingredients" in data:
-        recipe.title = data["ingredients"]
-    if "cost" in data:
-        recipe.cost = data["cost"]
+    if recipe:
+        if "title" in data:
+            recipe.title = data["title"]
+        if "making_time" in data:
+            recipe.making_time = data["making_time"]
+        if "serves" in data:
+            recipe.serves = data["serves"]
+        if "ingredients" in data:
+            recipe.title = data["ingredients"]
+        if "cost" in data:
+            recipe.cost = data["cost"]
+    else:
+        session.close()
+        return recipe
     session.commit()
     session.refresh(recipe)
-    session.close()
     return recipe
 
 def insert_recipe(recipe_data: RecipeRequest) -> Recipes:

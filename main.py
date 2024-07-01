@@ -72,9 +72,13 @@ def insert_recipe_response(recipe: RecipeRequest) -> PostRecipeMessageResponse:
 @app.patch("/recipes/{id}")
 def update_recipe_response(id: int, recipe_data: UpdateRecipeRequest) -> GetRecipeMessageResponse:
     recipe = update_recipe(id, recipe_data)
+    if recipe:
+        recipe = [recipe.get_response().model_dump()]
+    else:
+        recipe = []
     return GetRecipeMessageResponse(
         message="Recipe successfully updated!",
-        recipe=[recipe.get_response().model_dump()]
+        recipe=recipe
     )
 
 @app.delete("/recipes/{id}")
