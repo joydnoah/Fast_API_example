@@ -24,9 +24,9 @@ async def validation_exception_handler(request, exc: RequestValidationError):
         if error['type'] == 'missing':
             missing_validation.append(error['loc'][1])
         else:
-            return PlainTextResponse(str(exc), status_code=400)
+            return PlainTextResponse(str(exc), status_code=404)
     response = MissingFieldsError(required=missing_validation)
-    return PlainTextResponse(response.model_dump_json(), status_code=400)
+    return PlainTextResponse(response.model_dump_json(), status_code=200)
 
 @app.get("/recipes")
 def get_all_recipes_response() -> AllRecipesResponse:
